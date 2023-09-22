@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.362);
+            color: aliceblue;
+        }
+        input{
+
+            padding: 8px;
+            margin: 10px;
+            width: 100%;
+            height: 30px;
+            margin: none;
+            border:none;
+            border-radius:4px ;
+            background-color: rgba(0, 0, 0, 0.951);
+            color: aliceblue;
+        }
+        .price{
+            width: 100%;
+            display: flex;
+
+        }
+        #total{
+            background-color: rgb(189, 44, 44);
+            padding: 5px 2px;
+            width: 60px;
+            height:30px;
+            border-radius: 4px;
+        }
+        #total::before{
+            content: 'Total';
+        }
+        button{
+            width: 100%;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+            background: #2a0221;
+            border-radius: 20px;
+            transform: 0.55s;
+        }
+        button:hover{
+            background-color: #cc5bb2;
+            letter-spacing: 2px;
+        }
+        .btnSearch{
+            display: flex;
+            margin: 10px;
+            width: 90%;
+            margin-left: 40px;
+            justify-content: space-between;
+
+        }
+        table{
+            width: 100%;
+            text-align: center;
+            max-width: 10px 0px;
+
+        }
+        table th{
+            text-transform: uppercase;
+        }
+        th,td{
+            padding: 5px;
+        }
+        
+    </style>
+</head>
+<body >
+
+<div class="crud">
+    <div class="head">
+        <center> <h1>form</h1>
+            <p>PRODUCT MANAGEMENT SYSTEM</p>
+            </center>
+    </div>
+    <div class="inputs">
+        <input type="text" name="" id="title" placeholder="title">
+   <div class="price">
+    <input  onkeyup="getToatal()"  type="number" name="" id="price" placeholder="price">
+    <input onkeyup="getToatal()" type="number" name="" id="taxes" placeholder="taxes">
+    <input onkeyup="getToatal()" type="number" name="" id="ads" placeholder="ads">
+    <input onkeyup="getToatal()" type="number" name="" id="discounts" placeholder="discount">
+    <small id="total">32132</small>
+
+   </div>
+
+    <input type="number" name="" id="count" placeholder="count">
+    <input type="text" name="" id="category" placeholder="category">
+    <button id="submit" >Create</button>
+</div>
+   
+   
+   
+   
+    </div>
+    <div class="outputs">
+        <div class="search">
+            <input onkeyup="searchData1(this.value)"   type="text" name="" id="search" placeholder="search" >
+<div class="btnSearch">
+   
+    <button onclick="getSearchMood1(this.id)" id="searchTitle" >Search by title</button>
+<!-- onclick="getSearchMood(this.id)" -->
+    <button  onclick="getSearchMood1(this.id)" id="searchCategory" style="margin-left: 70px;" >Search by category</button>
+
+</div>        </div>
+
+
+<div>
+    <button id="clearr" onclick="clearr()" >clear</button>
+</div>
+
+<table>
+    <tr><th>id</th>
+    <th>title</th>
+    <th>price</th>
+    <th>taxes</th>
+<th>ads</th>
+<th>discounts</th>
+<td>count</td>
+<th>category</th>
+<th>update</th>
+<th>delete</th></tr>
+<tbody id="tbody">
+  
+</tbody>
+</table>
+    </div>
+</div>
+<br><br><br>
+<div style="align-self: flex-end; padding: 20px ; " ><i>copy right reeman shehri </i></div>
+
+
+<script>
+    //cal total price
+   //create product
+   //save local
+   //delete inputs
+   //count
+   //delete
+   //update
+   //search
+   //clean data
+
+   let title=document.getElementById('title')
+   let price=document.getElementById('price')
+   let taxes=document.getElementById('taxes')
+   let ads=document.getElementById('ads')
+   let discounts=document.getElementById('discounts')
+   let total=document.getElementById('total')
+   let count=document.getElementById('count')
+   let category=document.getElementById('category')
+   let btnn=document.getElementById('btnSearch')
+
+   let submit=document.getElementById('submit')
+   let id=0;
+   let mood='create';
+   let tmp;
+   let searchMood;
+let t=document.getElementById('searchTitle')
+//    console.log(title,price,taxes,discount,category,ads,total,count)
+ let getToatal=function(){
+ if(price.value != ''){
+    let result=+price.value+ +taxes.value+ads.value - +discounts.value;
+   total.innerHTML=result
+   total.style.background='#040';
+
+}
+else{
+    total.innerHTML='';
+    total.style.background="red";
+}
+ 
+
+ }
+
+ let dataPro;
+ if(localStorage.product!= null)
+ dataPro=JSON.parse(localStorage.product)
+else{
+ dataPro=[];
+}
+
+ submit.onclick=function(){
+    id+=1;
+let newPro={
+    id:id.value,
+    title:title.value,
+    price:price.value,
+    taxes:taxes.value,
+    ads:ads.value,
+    discounts:discounts.value,
+    
+    count:count.value,
+    category:category.value,
+
+
+
+
+}
+
+if(mood=='create'){
+    if(title.value!='')
+    if(newPro.count<100)
+if(newPro.count>1 ){
+   
+    for (let i=0;i<newPro.count;i++)
+    dataPro.push(newPro);
+
+}
+else{
+    dataPro.push(newPro);
+}}
+else{
+    dataPro[tmp]=newPro;
+    mood='create';
+    submit.innerHTML="create";
+    count.style.display='block'
+}
+
+
+// console.log(dataPro)
+
+localStorage.setItem('product' ,     JSON.stringify(dataPro)) 
+ clearData();
+ showData();
+
+}
+
+ let clearData=function(){
+    title.value='';
+    price.value='';
+    count.value='';
+    discounts.value='';
+    taxes.value='';
+    ads.value='';
+    total.innerHTML='';
+    category.value='';
+
+ }
+
+ function showData(){
+let table='';
+for(let i=0;i<dataPro.length;i++){
+    table +=`
+    <tr>
+        <td>${id}</td>
+        <td>${dataPro[i].title}</td>
+        <td>${dataPro[i].price}</td>
+        <td>${dataPro[i].taxes}</td>
+        <td>${dataPro[i].ads}</td>
+        <td>${dataPro[i].discounts}</td>
+        <td>${dataPro[i].count}</td>
+       
+        <td>${dataPro[i].category}</td>
+       
+        
+        <td><button id="update" onclick="updateData(${i})">update</button></td>
+
+        <td><button id="delete" onclick="deleteData(${i})">delete</button></td>
+
+    </tr>`
+    id++;
+
+}
+document.getElementById('tbody').innerHTML=table;
+let btnD=document.getElementById('clearr')
+if(dataPro.length>0){
+    btnD.innerHTML=`
+    <button onclick='clearr()'>clear (${dataPro.length})</button>`
+}
+else{
+    btnD.innerHTML='';
+}
+
+ }
+
+ function clearr(){
+    // localStorage.clear();
+    
+    // localStorage.splice(0)
+    for(let i=0;i<dataPro.length;i++)
+    dataPro.splice(i,1)
+localStorage.product=JSON.stringify(dataPro)
+showData() //for update to show new
+
+    showData();
+ }
+
+
+ function deleteData(i){
+dataPro.splice(i,1)
+localStorage.product=JSON.stringify(dataPro)
+showData() //for update to show new
+ }
+
+
+
+ let searchMood1='title'
+ function getSearchMood1(id){
+ if(id == 'searchTitle'){
+    searchMood1='title';
+    search.placeholder='search by title'
+ }
+ else{
+    searchMood1='category'
+    search.placeholder='search by category'
+ }
+search.focus();
+// console.log(searchMood1)
+ }
+
+
+
+
+ function searchData1(value){
+// console.log(value);
+let table='';
+if(searchMood1=='title'){
+
+for (let i=0;i<dataPro.length;i++){
+    if(dataPro[i].title.includes(value.toLowerCase())){
+        table +=`
+    <tr>
+        <td>${dataPro[i].id}</td>
+        <td>${dataPro[i].title}</td>
+        <td>${dataPro[i].price}</td>
+        <td>${dataPro[i].taxes}</td>
+        <td>${dataPro[i].ads}</td>
+        <td>${dataPro[i].discounts}</td>
+        <td>${dataPro[i].count}</td>
+       
+        <td>${dataPro[i].category}</td>
+       
+        
+        <td><button id="update" onclick="updateData(${i})">update</button></td>
+
+        <td><button id="delete" onclick="deleteData(${i})">delete</button></td>
+
+    </tr>`
+    // showData()
+    }}}
+    else{
+        for (let i=0;i<dataPro.length;i++){
+    if(dataPro[i].category.includes(value.toLowerCase())){
+        table +=`
+    <tr>
+        <td>${dataPro[i].id}</td>
+        <td>${dataPro[i].title}</td>
+        <td>${dataPro[i].price}</td>
+        <td>${dataPro[i].taxes}</td>
+        <td>${dataPro[i].ads}</td>
+        <td>${dataPro[i].discounts}</td> 
+          <td>${dataPro[i].count}</td>
+      
+        <td>${dataPro[i].category}</td>
+       
+        
+        <td><button id="update" onclick="updateData(${i})">update</button></td>
+
+        <td><button id="delete" onclick="deleteData(${i})">delete</button></td>
+
+    </tr>`
+
+    }}
+}
+
+
+
+    document.getElementById('tbody').innerHTML=table;
+
+
+
+
+
+ }
+function updateData(i){
+  title.value= dataPro[i].title;
+  price.value=dataPro[i].price;
+  taxes.value=dataPro[i].taxes;
+  ads.value=dataPro[i].ads;
+  category.value=dataPro[i].category;
+  discounts.value=dataPro[i].discounts;
+
+getToatal();
+  count.style.display='none';
+  submit.innerHTML='update';
+  mood='update';
+//   showData();
+  tmp=i;
+
+
+
+
+//   btnn.onclick=function(id){
+
+  
+
+//     btnn.style.background='red'
+
+   function getSearchMood (i){
+    let search =document.getElementsByClassName('search')
+  
+    let table='';
+    if(i=='searchTitle'){
+        searchMood='title'
+        search.placeholder='by title'
+    }
+    else{
+        searchMood='category'
+        searchTitle.placeholder='by category'
+    }
+    // search.focus()
+
+
+  }
+
+  function searchd(value){
+
+let table;
+    
+    if (value === '') {
+        document.getElementById('tbody').innerHTML = '';
+        return;
+    }
+
+    // Rest of the function code...
+
+else{
+    // if(searchMood=='title'){
+       for(let i=0;i<dataPro.length;i++)
+        if(dataPro[i].title.includes(value.toLowerCase())) {
+            table +=`
+    <tr>
+        <td>${dataPro[i].title}</td>
+        <td>${dataPro[i].price}</td>
+        <td>${dataPro[i].taxes}</td>
+        <td>${dataPro[i].ads}</td>
+        <td>${dataPro[i].discounts}</td>
+        <td>${dataPro[i].count}</td>
+        
+        <td>${dataPro[i].category}</td>
+       
+        
+        <td><button id="update" onclick="updateData(${i})">update</button></td>
+
+        <td><button id="delete" onclick="deleteData(${i})">delete</button></td>
+
+    </tr>`
+        
+       
+    }
+    else{
+
+        for(let i=0;i<dataPro.length;i++){
+        if(dataPro[i].category.toLowerCase().includes(value.toLowerCase())) {
+            table +=`
+    <tr>
+        <td>${dataPro[i].title}</td>
+        <td>${dataPro[i].price}</td>
+        <td>${dataPro[i].taxes}</td>
+        <td>${dataPro[i].ads}</td>
+        <td>${dataPro[i].discounts}</td>
+        <td>${dataPro[i].count}</td>
+       
+        <td>${dataPro[i].category}</td>
+       
+        
+        <td><button id="update" onclick="updateData(${i})">update</button></td>
+
+        <td><button id="delete" onclick="deleteData(${i})">delete</button></td>
+
+    </tr>`
+}
+    }
+}
+    document.getElementById('tbody').innerHTML=table;
+
+  }
+
+
+
+ 
+}
+  
+}
+</script>
+
+</body>
+</html>
